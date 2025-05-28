@@ -15,7 +15,7 @@ dnf5 install -y tailscale syncthing fish
 # Niri
 dnf5 install -y niri fuzzel \
     waybar foot \
-    mako \
+    mako flameshot \
     swayidle swaybg swaylock \
     light \
     wlsunset
