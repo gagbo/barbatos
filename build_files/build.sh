@@ -20,6 +20,8 @@ dnf5 install -y tailscale
 # dnf5 -y copr disable ublue-os/staging
 
 dnf5 -y copr enable alternateved/ghostty
+# file /usr/share/terminfo/g/ghostty from install of ghostty-1.1.3-1.git8a00aa8.20250528git8a00aa8.fc42.x86_64 conflicts with file from package ncurses-term-6.5-5.20250125.fc42.noarch
+dnf5 remove -y ncurses-term
 dnf5 install -y ghostty
 dnf5 -y copr disable alternateved/ghostty
 
