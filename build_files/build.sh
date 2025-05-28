@@ -10,7 +10,21 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 install -y tailscale
+dnf5 install -y tailscale syncthing fish
+
+# Niri
+dnf5 install -y niri fuzzel \
+    waybar foot \
+    mako \
+    swayidle swaybg \
+    wlsunset
+dnf5 -y copr enable ulysg/xwayland-satellite
+dnf5 install -y xwayland-satellite
+dnf5 -y copr disable ulysg/xwayland-satellite
+
+# Get Ansible and git, needed to kickstart dotfiles synchronization
+dnf5 install -y ansible git
+
 
 # Use a COPR Example:
 #
