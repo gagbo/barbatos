@@ -23,7 +23,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh && \
-    /ctx/extra/build-kmod-tuxedo-laptop.sh && \
     ostree container commit
     
 ### LINTING
