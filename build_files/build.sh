@@ -16,7 +16,8 @@ dnf5 install -y tailscale syncthing fish
 dnf5 install -y niri fuzzel \
     waybar foot \
     mako \
-    swayidle swaybg \
+    swayidle swaybg swaylock \
+    light \
     wlsunset
 dnf5 -y copr enable ulysg/xwayland-satellite
 dnf5 install -y xwayland-satellite
