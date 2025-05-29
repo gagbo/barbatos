@@ -7,7 +7,7 @@
 # Fedora base image: quay.io/fedora/fedora-bootc:41
 # CentOS base images: quay.io/centos-bootc/centos-bootc:stream10
 
-ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite-gnome"
+ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite"
 ARG TAG_VERSION="latest"
 
 # Allow build scripts to be referenced without being copied into the final image
@@ -18,7 +18,7 @@ COPY build_files /
 FROM ${BASE_IMAGE}:${TAG_VERSION}
 COPY system_files /
 
-ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite-gnome"
+ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite"
 ARG TAG_VERSION="latest"
 ARG SET_X=""
 
