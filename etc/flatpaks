@@ -1,5 +1,6 @@
 com.bitwarden.desktop
 com.github.tchx84.Flatseal
+com.logseq.Logseq
 com.nextcloud.desktopclient.nextcloud
 com.slack.Slack
 com.spotify.Client
@@ -7,6 +8,7 @@ dev.zed.Zed
 io.podman_desktop.PodmanDesktop
 org.cockpit_project.CockpitClient
 org.fedoraproject.MediaWriter
+org.freedesktop.Platform.ffmpeg-full
 org.gnome.Calendar
 org.gnome.Logs
 org.gnome.baobab
@@ -17,6 +19,7 @@ org.kde.kdenlive
 org.kde.krita
 org.libreoffice.LibreOffice
 org.mozilla.firefox
+org.mozilla.Thunderbird
 org.openstreetmap.josm
 org.openttd.OpenTTD
 org.pulseaudio.pavucontrol
