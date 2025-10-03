@@ -38,7 +38,7 @@ log "Install layered applications"
 dnf5 remove -y ncurses-term
 
 # Installing dkms first for the post-scriptlet of tuxedo drivers
-dnf5 install -y dkms linux-headers
+dnf5 install -y dkms kernel-headers
 # Install tuxedo-drivers will all weak deps too
 dnf5 install -y  tuxedo-drivers tuxedo-control-center
     
