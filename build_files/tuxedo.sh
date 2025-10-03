@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -ouex pipefail
+
+RELEASE="$(rpm -E %fedora)"
+
+
+### Install packages
+
+# Packages can be installed from any enabled yum repo on the image.
+# RPMfusion repos are available by default in ublue main images
+# List of rpmfusion packages can be found here:
+# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+
+# this installs a package from fedora repos
+rpm-ostree install rpm-build
+rpm-ostree install rpmdevtools
+rpm-ostree install kmodtool
+
+export HOME=/tmp
+
+rpmdev-setuptree
+
+git clone https://github.com/BrickMan240/tuxedo-drivers-kmod
+
+pushd tuxedo-drivers-kmod/
+./build.sh
+popd
+
+# Extract the Version value from the spec file
+export TD_VERSION=$(cat tuxedo-drivers-kmod/tuxedo-drivers-kmod-common.spec | grep -E '^Version:' | awk '{print $2}')
+rm -rf tuxedo-drivers-kmod
+
+rpm-ostree install ~/rpmbuild/RPMS/x86_64/akmod-tuxedo-drivers-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm ~/rpmbuild/RPMS/x86_64/tuxedo-drivers-kmod-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm ~/rpmbuild/RPMS/x86_64/tuxedo-drivers-kmod-common-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm ~/rpmbuild/RPMS/x86_64/kmod-tuxedo-drivers-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm
+
+KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+
+akmods --force --kernels "${KERNEL_VERSION}" --kmod "tuxedo-drivers-kmod"
+
+rpm-ostree install cargo rust meson ninja-build libadwaita-devel gtk4-devel
+git clone https://github.com/BrickMan240/tuxedo-rs
+pushd tuxedo-rs
+pushd tailord
+meson setup --prefix=/usr _build
+ninja -C _build
+ninja -C _build install
+systemctl enable tailord.service
+popd
+pushd tailor_gui
+meson setup --prefix=/usr _build
+ninja -C _build
+ninja -C _build install
+popd
+popd
+rm -rf tuxedo-rs

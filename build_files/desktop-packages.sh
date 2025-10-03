@@ -16,6 +16,7 @@ log "Enable Copr repos"
 COPR_REPOS=(
     alternateved/ghostty
     ulysg/xwayland-satellite
+    ublue-os/akmods
 )
 for repo in "${COPR_REPOS[@]}"; do
     dnf5 -y copr enable "$repo"
