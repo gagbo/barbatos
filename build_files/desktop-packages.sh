@@ -39,11 +39,11 @@ dnf5 remove -y ncurses-term
 
 # Installing dkms first for the post-scriptlet of tuxedo drivers
 dnf5 install -y dkms
-
+# Install tuxedo-drivers will all weak deps too
+dnf5 install -y  tuxedo-drivers tuxedo-control-center
+    
 # Layered Applications
 LAYERED_PACKAGES=(
-    tuxedo-drivers tuxedo-control-center
-    
     ansible git cosign
     podman-compose
     podman-remote
