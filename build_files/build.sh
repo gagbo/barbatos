@@ -25,6 +25,7 @@ log "Starting Barbatos build process - Inspired by VeneOS, AmyOS and m2os"
 
 case "$BASE_IMAGE" in
 *"/bazzite"*)
+    echo_group /ctx/tuxedo.sh
     echo_group /ctx/desktop-packages.sh
     echo_group /ctx/just-files.sh
     echo_group /ctx/desktop-defaults.sh

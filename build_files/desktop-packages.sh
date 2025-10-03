@@ -16,6 +16,7 @@ log "Enable Copr repos"
 COPR_REPOS=(
     alternateved/ghostty
     ulysg/xwayland-satellite
+    ublue-os/akmods
 )
 for repo in "${COPR_REPOS[@]}"; do
     dnf5 -y copr enable "$repo"
@@ -24,22 +25,12 @@ done
 log "Enable repositories"
 # Bazzite disabled this for some reason so lets re-enable it again
 dnf5 config-manager setopt terra.enabled=1 terra-extras.enabled=1
-tee /etc/yum.repos.d/tuxedo.repo <<EOF
-[repository]
-name=tuxedo
-baseurl=https://rpm.tuxedocomputers.com/fedora/${FEDORA_VERSION:-43}/x86_64/base
-enabled=1
-gpgcheck=0
-EOF
 
 log "Install layered applications"
 
 # file /usr/share/terminfo/g/ghostty from install of ghostty-1.1.3-1.git8a00aa8.20250528git8a00aa8.fc42.x86_64 conflicts with file from package ncurses-term-6.5-5.20250125.fc42.noarch
 dnf5 remove -y ncurses-term
 
-# Installing dkms first for the post-scriptlet of tuxedo drivers
-dnf5 install -y dkms kernel-headers
-    
 # Layered Applications
 LAYERED_PACKAGES=(
     ansible git cosign
@@ -82,6 +73,3 @@ done
 # rpm-ostree override remove steam
 log "Removing Steam from Bazzite install, please use flatpak instead"
 dnf5 -y remove steam
-
-rpm-ostree usroverlay --hotfix
-dnf5 install -y  tuxedo-drivers tuxedo-control-center
