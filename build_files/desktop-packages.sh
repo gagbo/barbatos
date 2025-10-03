@@ -37,9 +37,12 @@ log "Install layered applications"
 # file /usr/share/terminfo/g/ghostty from install of ghostty-1.1.3-1.git8a00aa8.20250528git8a00aa8.fc42.x86_64 conflicts with file from package ncurses-term-6.5-5.20250125.fc42.noarch
 dnf5 remove -y ncurses-term
 
+# Installing dkms first for the post-scriptlet of tuxedo drivers
+dnf5 install -y dkms
+
 # Layered Applications
 LAYERED_PACKAGES=(
-    dkms tuxedo-drivers tuxedo-control-center
+    tuxedo-drivers tuxedo-control-center
     
     ansible git cosign
     podman-compose
