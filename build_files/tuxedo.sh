@@ -26,6 +26,7 @@ git clone https://github.com/BrickMan240/tuxedo-drivers-kmod
 pushd tuxedo-drivers-kmod/
 ./build.sh
 popd
+rm -rf tuxedo-drivers-kmod
 
 # Extract the Version value from the spec file
 export TD_VERSION=$(cat tuxedo-drivers-kmod/tuxedo-drivers-kmod-common.spec | grep -E '^Version:' | awk '{print $2}')
@@ -38,14 +39,17 @@ akmods --force --kernels "${KERNEL_VERSION}" --kmod "tuxedo-drivers-kmod"
 
 rpm-ostree install cargo rust meson ninja-build libadwaita-devel gtk4-devel
 git clone https://github.com/BrickMan240/tuxedo-rs
-cd tuxedo-rs
-cd tailord
+pushd tuxedo-rs
+pushd tailord
 meson setup --prefix=/usr _build
 ninja -C _build
 ninja -C _build install
 systemctl enable tailord.service
-cd ../tailor_gui
+popd
+pushd tailor_gui
 meson setup --prefix=/usr _build
 ninja -C _build
 ninja -C _build install
-cd ../..
+popd
+popd
+rm -rf tuxedo-rs

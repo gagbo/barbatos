@@ -14,6 +14,7 @@ dnf5 clean all
 
 # Clean temporary files
 rm -rf /usr/etc
+rm -rf ~/rpmbuild
 
 log "Cleanup completed"
 
