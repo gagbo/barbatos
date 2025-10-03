@@ -39,8 +39,6 @@ dnf5 remove -y ncurses-term
 
 # Installing dkms first for the post-scriptlet of tuxedo drivers
 dnf5 install -y dkms kernel-headers
-# Install tuxedo-drivers will all weak deps too
-dnf5 install -y  tuxedo-drivers tuxedo-control-center
     
 # Layered Applications
 LAYERED_PACKAGES=(
@@ -84,3 +82,6 @@ done
 # rpm-ostree override remove steam
 log "Removing Steam from Bazzite install, please use flatpak instead"
 dnf5 -y remove steam
+
+rpm-ostree usroverlay --hotfix
+dnf5 install -y  tuxedo-drivers tuxedo-control-center
