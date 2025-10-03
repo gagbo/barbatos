@@ -26,10 +26,10 @@ git clone https://github.com/BrickMan240/tuxedo-drivers-kmod
 pushd tuxedo-drivers-kmod/
 ./build.sh
 popd
-rm -rf tuxedo-drivers-kmod
 
 # Extract the Version value from the spec file
 export TD_VERSION=$(cat tuxedo-drivers-kmod/tuxedo-drivers-kmod-common.spec | grep -E '^Version:' | awk '{print $2}')
+rm -rf tuxedo-drivers-kmod
 
 rpm-ostree install ~/rpmbuild/RPMS/x86_64/akmod-tuxedo-drivers-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm ~/rpmbuild/RPMS/x86_64/tuxedo-drivers-kmod-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm ~/rpmbuild/RPMS/x86_64/tuxedo-drivers-kmod-common-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm ~/rpmbuild/RPMS/x86_64/kmod-tuxedo-drivers-$TD_VERSION-1.fc${RELEASE}.x86_64.rpm
 
