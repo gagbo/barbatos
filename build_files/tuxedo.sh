@@ -54,6 +54,5 @@ cd ../..
 
 rpm-ostree uninstall screen
 
-rpm-ostree uninstall rpm-build
 rpm-ostree uninstall rpmdevtools
 rpm-ostree uninstall kmodtool
