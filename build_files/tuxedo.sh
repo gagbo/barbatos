@@ -13,8 +13,6 @@ RELEASE="$(rpm -E %fedora)"
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-rpm-ostree install screen
-
 rpm-ostree install rpm-build
 rpm-ostree install rpmdevtools
 rpm-ostree install kmodtool
@@ -51,8 +49,3 @@ meson setup --prefix=/usr _build
 ninja -C _build
 ninja -C _build install
 cd ../..
-
-rpm-ostree uninstall screen
-
-rpm-ostree uninstall rpmdevtools
-rpm-ostree uninstall kmodtool
