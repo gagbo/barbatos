@@ -24,6 +24,13 @@ done
 log "Enable repositories"
 # Bazzite disabled this for some reason so lets re-enable it again
 dnf5 config-manager setopt terra.enabled=1 terra-extras.enabled=1
+tee /etc/yum.repos.d/tuxedo.repo <<EOF
+[repository]
+name=tuxedo
+baseurl=https://rpm.tuxedocomputers.com/fedora/${FEDORA_VERSION:-43}/x86_64/base
+enabled=1
+gpgcheck=0
+EOF
 
 log "Install layered applications"
 
@@ -32,6 +39,8 @@ dnf5 remove -y ncurses-term
 
 # Layered Applications
 LAYERED_PACKAGES=(
+    dkms tuxedo-drivers tuxedo-control-center
+    
     ansible git cosign
     podman-compose
     podman-remote
