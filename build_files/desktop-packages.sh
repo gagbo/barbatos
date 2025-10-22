@@ -34,6 +34,7 @@ dnf5 remove -y ncurses-term
 # Layered Applications
 LAYERED_PACKAGES=(
     ansible git cosign
+    chezmoi
     podman-compose
     podman-remote
 
