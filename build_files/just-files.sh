@@ -10,7 +10,7 @@ log() {
 
 log "Adding Barbatos just recipes"
 
-echo "import \"/usr/share/barbatos/just/vene.just\"" >>/usr/share/ublue-os/justfile
+echo "import \"/usr/share/barbatos/just/barbatos.just\"" >>/usr/share/ublue-os/justfile
 
 log "Hide incompatible Bazzite just recipes"
 for recipe in "bazzite-cli" "install-coolercontrol" "install-openrgb" ; do

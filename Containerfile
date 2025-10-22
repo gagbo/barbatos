@@ -22,9 +22,22 @@ ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite"
 ARG TAG_VERSION="latest"
 ARG SET_X=""
 
+### [IM]MUTABLE /opt
+## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
+## make it mutable/writable for users. However, some packages write files to this directory,
+## thus its contents might be wiped out when bootc deploys an image, making it troublesome for
+## some packages. Eg, google-chrome, docker-desktop.
+##
+## Uncomment the following line if one desires to make /opt immutable and be able to be used
+## by the package manager.
+
+# RUN rm /opt && mkdir /opt
+
 ### MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the build.sh script
 ## the following RUN directive does all the things required to run "build.sh" as recommended.
+
+RUN sed -i '/^PRETTY_NAME/s/Bazzite/Barbatos/' /usr/lib/os-release
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
