@@ -2,7 +2,7 @@
 # Sign up and add the Repository ID to the right field. Owners fields are optional.
 # Examples: https://artifacthub.io/packages/search?ts_query_web=ublue&sort=relevance&page=1 
 
-repositoryID: barbatos # Fill in with your own credentials 
+repositoryID: bc729aa5-2ada-4849-9e91-a9787daae351
 owners: # (optional, used to claim repository ownership)
   - name: Gerry Agbobada
     email: git@gagbo.net
