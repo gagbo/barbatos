@@ -4,10 +4,20 @@ default:
 
 # Install all Barbatos apps
 [group('Barbatos')]
-@barb-install-all:
+@barb-install-apps:
   just barb-install-generic
   just barb-install-gaming
   just barb-install-work
+
+# Install all Barbatos CLIs
+[group('Barbatos')]
+@barb-install-clis:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  echo "Installing Brews"
+  brew bundle install --upgrade --file /usr/share/barbatos/homebrew/main.Brewfile
+  echo "Brew installation complete."
 
 [private]
 @barb-install_helper file:
