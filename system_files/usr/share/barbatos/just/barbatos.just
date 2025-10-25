@@ -79,8 +79,5 @@ barb-enable-hibernate:
   
   echo "${SWAP_FILE} none swap defaults,nofail 0 0" | sudo tee --append /etc/fstab
   
-  RESUME_OFFSET=$(sudo btrfs inspect-internal map-swapfile -r "$SWAP_FILE")
-  sudo rpm-ostree kargs --append-if-missing="resume_offset=${RESUME_OFFSET}"
-  
   sudo truncate -s 0 /etc/systemd/zram-generator.conf
   
