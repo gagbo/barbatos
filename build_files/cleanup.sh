@@ -4,7 +4,9 @@ set ${SET_X:+-x} -euo pipefail
 trap '[[ $BASH_COMMAND != echo* ]] && [[ $BASH_COMMAND != log* ]] && echo "+ $BASH_COMMAND"' DEBUG
 
 log() {
+  set +x
   echo "=== $* ==="
+  set -x
 }
 
 log "Starting system cleanup"
