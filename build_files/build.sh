@@ -6,6 +6,7 @@ trap '[[ $BASH_COMMAND != echo* ]] && [[ $BASH_COMMAND != log* ]] && echo "+ $BA
 
 ## Set a group for github actions logs
 function echo_group() {
+    set +x
     local WHAT
     WHAT="$(
         basename "$1" .sh |
@@ -13,8 +14,11 @@ function echo_group() {
             tr "_" " "
     )"
     echo "::group:: == ${WHAT^^} =="
+    set -x
     "$1"
+    set +x
     echo "::endgroup::"
+    set -x
 }
 
 log() {
