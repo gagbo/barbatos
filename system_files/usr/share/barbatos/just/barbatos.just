@@ -81,3 +81,11 @@ barb-enable-hibernate:
   
   sudo truncate -s 0 /etc/systemd/zram-generator.conf
   
+# Install Noctalia shell files
+[group('Barbatos')]
+@barb-get-noctalia:
+  mkdir -p ~/.config/quickshell/noctalia-shell
+  curl -sL https://github.com/noctalia-dev/noctalia-shell/releases/latest/download/noctalia-latest.tar.gz
+  tar -xz --strip-components=1 -C ~/.config/quickshell/noctalia-shell
+  echo "Run Noctalia through quickshell: \`spawn-at-startup \"qs\" \"-c\" \"noctalia-shell\"\`"
+  echo "Check documentation: https://docs.noctalia.dev/getting-started/compositor-settings/"
