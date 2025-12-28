@@ -1,0 +1,102 @@
+---
+# GitLab CI/CD Configuration for BarbatOS Image Build
+# This configuration replaces the GitHub Actions workflow and uses vendored shell scripts
+# All commands are internalized in .ci/scripts/ directory
+
+variables:
+  # Image configuration
+  IMAGE_NAME: "$CI_PROJECT_NAME"
+  IMAGE_DESC: "Gerry Agbobada's customized Universal Blue Image"
+  IMAGE_REGISTRY: "$CI_REGISTRY/gagbo"
+  ARTIFACTHUB_LOGO_URL: "https://avatars.githubusercontent.com/u/10496163?s=200&v=4"
+
+  # Buildah configuration
+  STORAGE_DRIVER: "vfs"
+  BUILDAH_FORMAT: "docker"
+  BUILDAH_ISOLATION: "chroot"
+
+  # Cosign version
+  COSIGN_VERSION: "v2.4.1"
+
+# Define pipeline stages
+stages:
+  - build
+  - push
+  - sign
+
+# Define when to run the pipeline
+workflow:
+  rules:
+    # Run on merge requests
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Run on main branch pushes
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Run on scheduled pipelines (daily builds)
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    # Run on manual/web triggers
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+# Main job: build and optionally push/sign the image
+build_push_sign:
+  stage: build
+
+  # Use container image with buildah pre-installed
+  image: quay.io/containers/aio:latest
+
+  # Configure buildah for rootless operation
+  variables:
+    STORAGE_DRIVER: vfs
+    BUILDAH_FORMAT: docker
+    BUILDAH_ISOLATION: chroot
+
+  before_script:
+    # Install cosign for signing (only on default branch)
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
+        ./.ci/scripts/install-cosign.sh
+      fi
+
+  script:
+    # Generate metadata (tags and labels)
+    - ./.ci/scripts/generate-metadata.sh
+    - source build.env
+
+    # Build the container image
+    - ./.ci/scripts/build-image.sh
+
+    # Push images (only on default branch, not on MRs)
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
+        ./.ci/scripts/push-image.sh
+      else
+        echo "Skipping push: not on default branch or in merge request"
+      fi
+
+    # Sign images with cosign (only on default branch, not on MRs)
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
+        ./.ci/scripts/sign-image.sh
+      else
+        echo "Skipping signing: not on default branch or in merge request"
+      fi
+
+  # Save build metadata as artifacts
+  artifacts:
+    reports:
+      dotenv: report.env
+    paths:
+      - report.env
+    expire_in: 1 day
+
+  # Define when this job runs
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+# Concurrency settings to prevent multiple pipelines running simultaneously
+# This is equivalent to GitHub Actions' concurrency settings
+.auto_devops: &auto_devops
+  interruptible: true
+  resource_group: $CI_COMMIT_REF_NAME
