@@ -37,9 +37,14 @@ dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/te
 
 log "Install layered applications"
 
-# Layered Applications
+# Cosign is special (= unavailable in repos)
+LATEST_COSIGN_VERSION=$(curl https://api.github.com/repos/sigstore/cosign/releases/latest | grep tag_name | cut -d : -f2 | tr -d "v\", ")
+curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-${LATEST_COSIGN_VERSION}-1.x86_64.rpm"
+rpm -ivh cosign-${LATEST_COSIGN_VERSION}-1.x86_64.rpm
+
+# Other Layered Applications
 LAYERED_PACKAGES=(
-    ansible git cosign
+    ansible git
     chezmoi
     podman-compose
     podman-remote
