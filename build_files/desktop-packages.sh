@@ -20,20 +20,31 @@ COPR_REPOS=(
     errornointernet/quickshell
     ulysg/xwayland-satellite
     ublue-os/akmods
+    avengemedia/dms
 )
 for repo in "${COPR_REPOS[@]}"; do
     dnf5 -y copr enable "$repo"
 done
 
 log "Enable repositories"
-# Bazzite disabled this for some reason so lets re-enable it again
-dnf5 config-manager setopt terra.enabled=1 terra-extras.enabled=1
+# Reenable Terra repos (installed on F42 and earlier)
+for i in /etc/yum.repos.d/terra*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=0@enabled=1@g' "$i"
+    fi
+done
+dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras} || true
 
 log "Install layered applications"
 
-# Layered Applications
+# Cosign is special (= unavailable in repos)
+LATEST_COSIGN_VERSION=$(curl https://api.github.com/repos/sigstore/cosign/releases/latest | grep tag_name | cut -d : -f2 | tr -d "v\", ")
+curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-${LATEST_COSIGN_VERSION}-1.x86_64.rpm"
+rpm -ivh cosign-${LATEST_COSIGN_VERSION}-1.x86_64.rpm
+
+# Other Layered Applications
 LAYERED_PACKAGES=(
-    ansible git cosign
+    ansible git
     chezmoi
     podman-compose
     podman-remote
@@ -58,7 +69,8 @@ LAYERED_PACKAGES=(
     mako fuzzel swaybg light flameshot foot
     xwayland-satellite
 
-    quickshell polkit-kde brightnessctl
+    dms
+    polkit-kde brightnessctl
     xdg-desktop-portal evolution-data-server
     ddcutil
 
@@ -78,3 +90,10 @@ done
 # rpm-ostree override remove steam
 log "Removing Steam from Bazzite install, please use flatpak instead"
 dnf5 -y remove steam
+
+# Disable terra repos
+for i in /etc/yum.repos.d/terra*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "$i"
+    fi
+done

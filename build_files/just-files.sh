@@ -17,8 +17,8 @@ echo "import \"/usr/share/barbatos/just/barbatos.just\"" >>/usr/share/ublue-os/j
 log "Hide incompatible Bazzite just recipes"
 for recipe in "bazzite-cli" "install-coolercontrol" "install-openrgb" ; do
   if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
-    echo "Error: Recipe $recipe not found in any just file"
-    exit 1
+    echo "Warning: Recipe $recipe not found in any just file"
+    continue
   fi
   sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
 done
