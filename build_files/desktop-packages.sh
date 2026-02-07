@@ -28,7 +28,7 @@ done
 
 log "Enable repositories"
 # Bazzite disabled this for some reason so lets re-enable it again
-dnf5 config-manager setopt terra.enabled=1 terra-extras.enabled=1
+dnf5 config-manager setopt terra.enabled=1 terra-extras.enabled=1 || true
 
 log "Install layered applications"
 
