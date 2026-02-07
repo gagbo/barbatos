@@ -27,9 +27,12 @@ for repo in "${COPR_REPOS[@]}"; do
 done
 
 log "Enable repositories"
-curl -fsSL https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo | pkexec tee /etc/yum.repos.d/terra.repo
-# Bazzite disabled this for some reason so lets re-enable it again
-dnf5 config-manager setopt terra.enabled=1 terra-extras.enabled=1 || true
+# Reenable Terra repos (installed on F42 and earlier)
+for i in /etc/yum.repos.d/terra*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=0@enabled=1@g' "$i"
+    fi
+done
 
 log "Install layered applications"
 
