@@ -7,8 +7,8 @@
 # Fedora base image: quay.io/fedora/fedora-bootc:41
 # CentOS base images: quay.io/centos-bootc/centos-bootc:stream10
 
-ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite"
-ARG TAG_VERSION="latest"
+ARG BASE_IMAGE="ghcr.io/ublue-os/aurora"
+ARG TAG_VERSION="stable"
 
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
@@ -18,8 +18,8 @@ COPY build_files /
 FROM ${BASE_IMAGE}:${TAG_VERSION}
 COPY system_files /
 
-ARG BASE_IMAGE="ghcr.io/ublue-os/bazzite"
-ARG TAG_VERSION="latest"
+ARG BASE_IMAGE="ghcr.io/ublue-os/aurora"
+ARG TAG_VERSION="stable"
 ARG SET_X=""
 
 ### [IM]MUTABLE /opt
@@ -38,6 +38,7 @@ ARG SET_X=""
 ## the following RUN directive does all the things required to run "build.sh" as recommended.
 
 RUN sed -i '/^PRETTY_NAME/s/Bazzite/Barbatos/' /usr/lib/os-release
+RUN sed -i '/^PRETTY_NAME/s/Aurora/Barbatos/' /usr/lib/os-release
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \

@@ -20,6 +20,7 @@ COPR_REPOS=(
     errornointernet/quickshell
     ulysg/xwayland-satellite
     ublue-os/akmods
+    avengemedia/dms
 )
 for repo in "${COPR_REPOS[@]}"; do
     dnf5 -y copr enable "$repo"
@@ -58,7 +59,8 @@ LAYERED_PACKAGES=(
     mako fuzzel swaybg light flameshot foot
     xwayland-satellite
 
-    quickshell polkit-kde brightnessctl
+    dms
+    polkit-kde brightnessctl
     xdg-desktop-portal evolution-data-server
     ddcutil
 
