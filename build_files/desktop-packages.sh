@@ -33,6 +33,7 @@ for i in /etc/yum.repos.d/terra*.repo; do
         sed -i 's@enabled=0@enabled=1@g' "$i"
     fi
 done
+dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras} || true
 
 log "Install layered applications"
 
@@ -84,3 +85,10 @@ done
 # rpm-ostree override remove steam
 log "Removing Steam from Bazzite install, please use flatpak instead"
 dnf5 -y remove steam
+
+# Disable terra repos
+for i in /etc/yum.repos.d/terra*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "$i"
+    fi
+done
