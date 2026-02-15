@@ -21,6 +21,7 @@ COPR_REPOS=(
     ulysg/xwayland-satellite
     ublue-os/akmods
     avengemedia/dms
+    quadratech188/vicinae
 )
 for repo in "${COPR_REPOS[@]}"; do
     dnf5 -y copr enable "$repo"
@@ -50,24 +51,22 @@ LAYERED_PACKAGES=(
     podman-remote
 
     fish
-    starship zoxide
+    starship
     zsh
 
-    atuin bat btop direnv
-    eza gh ripgrep jq
+    jq
 
     cockpit
     cockpit-machines
     cockpit-ostree
     cockpit-sosreport
 
-    ghostty
-    helix neovim
+    ghostty helix
     fira-code-fonts
 
     niri waybar wlsunset swaylock swayidle
     mako fuzzel swaybg light flameshot foot
-    xwayland-satellite
+    xwayland-satellite vicinae
 
     dms
     polkit-kde brightnessctl
