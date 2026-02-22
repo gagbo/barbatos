@@ -64,9 +64,12 @@ LAYERED_PACKAGES=(
     ghostty helix
     fira-code-fonts
 
-    niri waybar wlsunset swaylock swayidle
+    niri
+    xdg-desktop-portal-gnome xdg-desktop-portal-gtk
+    wlsunset swaylock swayidle
     mako fuzzel swaybg light flameshot foot
     xwayland-satellite vicinae
+    qt6-qtmultimedia cava
 
     dms
     polkit-kde brightnessctl
