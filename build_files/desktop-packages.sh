@@ -66,10 +66,12 @@ LAYERED_PACKAGES=(
 
     niri
     xdg-desktop-portal-gnome xdg-desktop-portal-gtk
+    python3 cliphist 
     wlsunset swaylock swayidle
     mako fuzzel swaybg light flameshot foot
     xwayland-satellite vicinae
     qt6-qtmultimedia cava
+    ImageMagick
 
     dms
     polkit-kde brightnessctl
