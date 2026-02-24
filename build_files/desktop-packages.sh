@@ -68,7 +68,8 @@ LAYERED_PACKAGES=(
     xdg-desktop-portal-gnome xdg-desktop-portal-gtk
     python3 cliphist 
     wlsunset swaylock swayidle
-    mako fuzzel swaybg light flameshot foot
+    mako fuzzel swaybg light foot
+    grim wl-clipboard 
     xwayland-satellite vicinae
     qt6-qtmultimedia cava
     ImageMagick

@@ -18,3 +18,5 @@ log "Fetched Satty version: ${LATEST_SATTY_VERSION}"
 curl -O -L "https://github.com/Satty-org/Satty/releases/download/${LATEST_SATTY_VERSION}/satty-${LATEST_SATTY_VERSION}.flatpak"
 flatpak install --system -y satty-${LATEST_SATTY_VERSION}.flatpak
 rm satty-${LATEST_SATTY_VERSION}.flatpak
+
+satty --version
