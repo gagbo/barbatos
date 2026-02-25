@@ -22,15 +22,13 @@ barb-install-apps: barb-install-generic barb-install-gaming barb-install-work
   set -euo pipefail
 
   echo "Installing {{file}} Flatpaks..."
-  xargs -a <(curl --retry 3 -sL https://raw.githubusercontent.com/gagbo/barbatos/main/etc/flatpaks/{{file}}) flatpak --system -y install
+  xargs -a <(curl --retry 3 -sL https://raw.githubusercontent.com/gagbo/barbatos/main/etc/flatpaks/{{file}}) flatpak --system -y install --or-update
   echo "Flatpaks installation complete."
 
 # Install Satty (not published on Flathub, just as github release)
 [private]
-@barb-install-satty:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  bash /usr/share/barbatos/just/satty.sh
+barb-install-satty:
+  just sudoif bash /usr/share/barbatos/just/satty.sh
 
 # Install Generic Flatpaks
 [group('Barbatos')]
