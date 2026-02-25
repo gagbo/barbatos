@@ -33,6 +33,7 @@ case "$BASE_IMAGE" in
 	# Example: https://github.com/gagbo/barbatos/actions/runs/18904270020/job/53974623145
 	# echo_group /ctx/tuxedo.sh
 	echo_group /ctx/desktop-packages.sh
+	echo_group /ctx/satty.sh
 	echo_group /ctx/just-files.sh
 	echo_group /ctx/desktop-defaults.sh
 	;;
