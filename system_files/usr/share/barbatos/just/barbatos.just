@@ -4,10 +4,7 @@ default:
 
 # Install all Barbatos apps
 [group('Barbatos')]
-@barb-install-apps:
-  just barb-install-generic
-  just barb-install-gaming
-  just barb-install-work
+barb-install-apps: barb-install-generic barb-install-gaming barb-install-work
 
 # Install all Barbatos CLIs
 [group('Barbatos')]
@@ -37,19 +34,15 @@ default:
 
 # Install Generic Flatpaks
 [group('Barbatos')]
-@barb-install-generic:
-  just barb-install_helper generic
-  just barb-install-satty
+barb-install-generic: (barb-install_helper "generic") barb-install-satty
 
 # Install Gaming Flatpaks
 [group('Barbatos')]
-@barb-install-gaming:
-  just barb-install_helper gaming
+barb-install-gaming: (barb-install_helper "gaming")
 
 # Install Work Flatpaks
 [group('Barbatos')]
-@barb-install-work:
-  just barb-install_helper work
+barb-install-work: (barb-install_helper "work")
 
 # Ensure swap partition big enough to hibernate (useful for laptops)
 # Note: This consumes the RAM size as disk space
