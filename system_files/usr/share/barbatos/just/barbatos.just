@@ -28,10 +28,18 @@ default:
   xargs -a <(curl --retry 3 -sL https://raw.githubusercontent.com/gagbo/barbatos/main/etc/flatpaks/{{file}}) flatpak --system -y install
   echo "Flatpaks installation complete."
 
+# Install Satty (not published on Flathub, just as github release)
+[private]
+@barb-install-satty:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  bash /usr/share/barbatos/just/satty.sh
+
 # Install Generic Flatpaks
 [group('Barbatos')]
 @barb-install-generic:
   just barb-install_helper generic
+  just barb-install-satty
 
 # Install Gaming Flatpaks
 [group('Barbatos')]
