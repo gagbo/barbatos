@@ -8,7 +8,7 @@ barb-install-apps: barb-install-generic barb-install-gaming barb-install-work
 
 # Install all Barbatos CLIs
 [group('Barbatos')]
-@barb-install-clis:
+barb-install-clis:
   #!/usr/bin/env bash
   set -euo pipefail
 
@@ -17,12 +17,19 @@ barb-install-apps: barb-install-generic barb-install-gaming barb-install-work
   echo "Brew installation complete."
 
 [private]
-@barb-install_helper file:
+barb-install_helper file:
   #!/usr/bin/env bash
   set -euo pipefail
 
   echo "Installing {{file}} Flatpaks..."
-  xargs -a <(curl --retry 3 -sL https://raw.githubusercontent.com/gagbo/barbatos/main/etc/flatpaks/{{file}}) flatpak --system -y install --or-update
+  while IFS= read -r app || [[ -n "$app" ]]; do
+    [[ -z "$app" ]] && continue
+    if ! flatpak info --system "$app" &>/dev/null; then
+      flatpak --system -y install "$app"
+    else
+      flatpak --system -y update "$app" || true
+    fi
+  done < <(curl --retry 3 -sL https://raw.githubusercontent.com/gagbo/barbatos/main/etc/flatpaks/{{file}})
   echo "Flatpaks installation complete."
 
 # Install Satty (not published on Flathub, just as github release)

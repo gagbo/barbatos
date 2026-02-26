@@ -23,7 +23,11 @@ LATEST_SATTY_VERSION=$(
 log "Fetched Satty version: ${LATEST_SATTY_VERSION}"
 
 curl -o "${TMPDIR}/satty-${LATEST_SATTY_VERSION}.flatpak" -L "https://github.com/Satty-org/Satty/releases/download/${LATEST_SATTY_VERSION}/satty-${LATEST_SATTY_VERSION}.flatpak"
-flatpak install --or-update --system -y "${TMPDIR}/satty-${LATEST_SATTY_VERSION}.flatpak"
+if ! flatpak info --system org.satty.Satty &>/dev/null; then
+	flatpak install --system -y "${TMPDIR}/satty-${LATEST_SATTY_VERSION}.flatpak"
+else
+	flatpak update --system -y org.satty.Satty || true
+fi
 
 flatpak info --system org.satty.Satty >/dev/null
 log "Satty Flatpak installed"
