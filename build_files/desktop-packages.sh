@@ -69,7 +69,7 @@ LAYERED_PACKAGES=(
     python3 cliphist 
     wlsunset swaylock swayidle
     mako fuzzel swaybg light foot
-    grim wl-clipboard 
+    grim slurp wl-clipboard 
     xwayland-satellite vicinae
     qt6-qtmultimedia cava
     ImageMagick

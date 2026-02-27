@@ -35,7 +35,7 @@ barb-install_helper file:
 # Install Satty (not published on Flathub, just as github release)
 [private]
 barb-install-satty:
-  just sudoif bash /usr/share/barbatos/just/satty.sh
+  ujust sudoif bash /usr/share/barbatos/just/satty.sh
 
 # Install Generic Flatpaks
 [group('Barbatos')]
