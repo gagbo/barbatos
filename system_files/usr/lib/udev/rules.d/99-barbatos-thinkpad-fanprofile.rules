@@ -1,0 +1,3 @@
+# Switch thinkfan config between AC (aggressive) and battery (quiet) profiles.
+# Only triggers on ThinkPad hardware (thinkpad_acpi must be loaded).
+SUBSYSTEM=="power_supply", ATTR{type}=="Mains", TEST=="/proc/acpi/ibm/fan", TAG+="systemd", ENV{SYSTEMD_WANTS}="barbatos-fanprofile-switch.service"

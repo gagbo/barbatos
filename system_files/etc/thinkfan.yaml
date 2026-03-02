@@ -1,0 +1,23 @@
+# Aggressive fan profile for ThinkPad on AC power.
+# Fans ramp up earlier to keep thermals low under sustained load.
+#
+# thinkpad_acpi levels: 0-7, "level auto", "level disengaged"
+# k10temp Tctl is the most responsive AMD CPU sensor.
+
+sensors:
+  - hwmon: /sys/class/hwmon
+    name: k10temp
+    indices: [1]
+
+fans:
+  - tpacpi: /proc/acpi/ibm/fan
+
+levels:
+  - [0,      0,  50]
+  - [1,     47,  55]
+  - [2,     52,  60]
+  - [3,     57,  63]
+  - [4,     60,  66]
+  - [5,     63,  70]
+  - [7,     67,  75]
+  - [127,   72, 32767]
