@@ -1,0 +1,19 @@
+# Quiet fan profile for ThinkPad on battery.
+# Fans stay off or low longer to save power and reduce noise.
+
+sensors:
+  - hwmon: /sys/class/hwmon
+    name: k10temp
+    indices: [1]
+
+fans:
+  - tpacpi: /proc/acpi/ibm/fan
+
+levels:
+  - [0,      0,  65]
+  - [1,     60,  70]
+  - [2,     67,  75]
+  - [3,     72,  78]
+  - [5,     75,  83]
+  - [7,     80,  88]
+  - [127,   85, 32767]

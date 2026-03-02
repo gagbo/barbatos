@@ -1,0 +1,7 @@
+[Unit]
+Description=Switch thinkfan profile based on AC/battery state
+ConditionPathExists=/proc/acpi/ibm/fan
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/barbatos-fanprofile-switch.sh
