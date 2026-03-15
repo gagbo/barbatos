@@ -73,7 +73,7 @@ LAYERED_PACKAGES=(
 	qt6-qtmultimedia cava
 	ImageMagick
 
-	dms
+	dms matugen
 	polkit-kde brightnessctl
 	xdg-desktop-portal evolution-data-server
 	ddcutil
