@@ -18,7 +18,6 @@ COPR_REPOS=(
 	scottames/ghostty
 	ulysg/xwayland-satellite
 	ublue-os/akmods
-	avengemedia/dms
 	quadratech188/vicinae
 )
 for repo in "${COPR_REPOS[@]}"; do
@@ -72,7 +71,7 @@ LAYERED_PACKAGES=(
 	qt6-qtmultimedia cava
 	ImageMagick
 
-	dms matugen
+	 matugen
 	polkit-kde brightnessctl
 	xdg-desktop-portal evolution-data-server
 	ddcutil
