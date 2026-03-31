@@ -16,7 +16,6 @@ log "Enable Copr repos"
 
 COPR_REPOS=(
 	scottames/ghostty
-	errornointernet/quickshell
 	ulysg/xwayland-satellite
 	ublue-os/akmods
 	avengemedia/dms
@@ -63,7 +62,7 @@ LAYERED_PACKAGES=(
 	ghostty helix
 	fira-code-fonts
 
-	niri
+	niri quickshell
 	xdg-desktop-portal-gnome xdg-desktop-portal-gtk
 	python3 cliphist
 	wlsunset swaylock swayidle
