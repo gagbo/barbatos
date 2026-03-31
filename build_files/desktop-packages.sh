@@ -61,7 +61,7 @@ LAYERED_PACKAGES=(
 	ghostty helix
 	fira-code-fonts
 
-	niri quickshell
+	niri noctalia-shell
 	xdg-desktop-portal-gnome xdg-desktop-portal-gtk
 	python3 cliphist
 	wlsunset swaylock swayidle
@@ -71,7 +71,7 @@ LAYERED_PACKAGES=(
 	qt6-qtmultimedia cava
 	ImageMagick
 
-	 matugen
+	matugen
 	polkit-kde brightnessctl
 	xdg-desktop-portal evolution-data-server
 	ddcutil
