@@ -81,6 +81,8 @@ LAYERED_PACKAGES=(
 	sqlite
 	yubikey-manager
 
+	syncthing syncthing-tools
+
 	thinkfan
 )
 dnf5 install --setopt=install_weak_deps=False -y "${LAYERED_PACKAGES[@]}"
