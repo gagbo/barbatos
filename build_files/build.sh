@@ -6,7 +6,11 @@ set -ouex pipefail
 
 ## Set a group for github actions logs
 function echo_group() {
-	set +x
+	local had_xtrace=0
+	if [[ $- == *x* ]]; then
+		had_xtrace=1
+		set +x
+	fi
 	local WHAT
 	WHAT="$(
 		basename "$1" .sh |
@@ -14,18 +18,34 @@ function echo_group() {
 			tr "_" " "
 	)"
 	echo "::group:: == ${WHAT^^} =="
-	set -x
+	if (( had_xtrace )); then
+		set -x
+	fi
 	"$1"
-	set +x
+	if (( had_xtrace )); then
+		set +x
+	fi
 	echo "::endgroup::"
-	set -x
+	if (( had_xtrace )); then
+		set -x
+	fi
 }
 
 log() {
-	echo "== $* =="
+	local had_xtrace=0
+	if [[ $- == *x* ]]; then
+		had_xtrace=1
+		set +x
+	fi
+	printf '== %s ==\n' "$*"
+	if (( had_xtrace )); then
+		set -x
+	fi
 }
 
+set +x
 log "Starting Barbatos build process - Inspired by VeneOS, AmyOS and m2os"
+set -x
 
 case "$BASE_IMAGE" in
 *"/bazzite"* | *"/aurora"*)
@@ -40,5 +60,7 @@ case "$BASE_IMAGE" in
 *"/ucore"*) ;;
 esac
 
+set +x
 log "Post build cleanup"
+set -x
 echo_group /ctx/cleanup.sh
