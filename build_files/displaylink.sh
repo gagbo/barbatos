@@ -3,9 +3,15 @@
 set ${SET_X:+-x} -eou pipefail
 
 log() {
-	set +x
-	echo "=== $* ==="
-	set -x
+	local had_xtrace=0
+	if [[ $- == *x* ]]; then
+		had_xtrace=1
+		set +x
+	fi
+	printf '=== %s ===\n' "$*"
+	if (( had_xtrace )); then
+		set -x
+	fi
 }
 
 RELEASE="$(rpm -E %fedora)"
