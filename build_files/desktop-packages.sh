@@ -58,7 +58,7 @@ LAYERED_PACKAGES=(
 	cockpit-ostree
 	cockpit-sosreport
 
-	ghostty helix
+	ghostty helix kitty
 	fira-code-fonts
 
 	niri noctalia-shell
