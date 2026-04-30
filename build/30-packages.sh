@@ -4,6 +4,7 @@
 # Packages already shipped by silverblue-main + projectbluefin/common are
 # *not* listed here. The list focuses on Barbatos's distinct identity:
 #   - Niri / Wayland stack (compositor, shell, helpers)
+#   - Sway / Wayland stack (compositor, portal, bar, launcher)
 #   - Terminals & editors (ghostty, helix, kitty)
 #   - Theming (matugen, brightnessctl, ImageMagick, fonts, qt6 multimedia)
 #   - Hardware (thinkfan)
@@ -76,8 +77,14 @@ LAYERED_PACKAGES=(
 	grim slurp wl-clipboard
 	wlsunset swaylock swayidle
 	light cliphist
-  mate-polkit gnome-keyring gnome-keyring-pam
+	mate-polkit gnome-keyring gnome-keyring-pam
 	cava qt6-qtmultimedia
+
+	# Sway / Wayland session
+	sway sway-systemd
+	xdg-desktop-portal-wlr
+	waybar walker
+	playerctl
 
 	# Terminals & editors
 	ghostty helix kitty
