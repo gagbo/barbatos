@@ -117,7 +117,7 @@ jobs:
           sudo podman save -o /tmp/barbatos-rechunked.tar "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
           podman rmi "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" || true
           podman load -i /tmp/barbatos-rechunked.tar
-          rm /tmp/barbatos-rechunked.tar
+          sudo rm /tmp/barbatos-rechunked.tar
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
