@@ -28,7 +28,7 @@ echo_group() {
 		set +x
 	fi
 	local what
-	what="$(basename "$1" .sh | tr '-_' '  ')"
+	what="$(basename "$1" .sh | tr -- '-_' '  ')"
 	echo "::group:: == ${what^^} =="
 	if ((had_xtrace)); then set -x; fi
 	"$1"
