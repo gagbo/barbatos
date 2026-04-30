@@ -101,19 +101,23 @@ jobs:
           done
 
       # Rechunk for smaller bootc delta updates (~5-10x improvement).
-      # buildah-build runs rootless, so we copy the image into rootful storage
-      # where the rechunk container (fedora-bootc) can access it via the
-      # /var/lib/containers bind-mount.
+      # buildah-build runs rootless, so we shuttle the image through rootful
+      # storage via podman save/load for the rechunk container to access it.
       - name: Rechunk Image
         run: |
-          sudo podman image scp $(id -un)@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} root@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          podman save -o /tmp/barbatos-pre-rechunk.tar "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          sudo podman load -i /tmp/barbatos-pre-rechunk.tar
+          rm /tmp/barbatos-pre-rechunk.tar
           sudo podman run --rm --privileged \
             -v /var/lib/containers:/var/lib/containers \
             quay.io/fedora/fedora-bootc:43 \
             /usr/libexec/bootc-base-imagectl rechunk --max-layers 67 \
             "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
             "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          sudo podman image scp root@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} $(id -un)@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          sudo podman save -o /tmp/barbatos-rechunked.tar "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          podman rmi "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" || true
+          podman load -i /tmp/barbatos-rechunked.tar
+          rm /tmp/barbatos-rechunked.tar
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
