@@ -1,47 +1,41 @@
-## Other possible base images include:
-# FROM ghcr.io/ublue-os/bazzite:latest
-# FROM ghcr.io/ublue-os/bluefin-nvidia:stable
-# 
-# ... and so on, here are more base images
-# Universal Blue Images: https://github.com/orgs/ublue-os/packages
-# Fedora base image: quay.io/fedora/fedora-bootc:41
-# CentOS base images: quay.io/centos-bootc/centos-bootc:stream10
+# Barbatos - Gerry Agbobada's customized Universal Blue image
+#
+# Multi-stage build following the finpilot / upstream Bluefin pattern.
+# Base: silverblue-main (Fedora GNOME)
+# Layers: projectbluefin/common (shared desktop config) + ublue-os/brew (homebrew)
+#
+# Renovate auto-updates the @sha256: digests via the dockerfile manager.
 
-ARG BASE_IMAGE="ghcr.io/ublue-os/aurora-dx"
-ARG TAG_VERSION="stable-daily"
-
-# Allow build scripts to be referenced without being copied into the final image
+# --- Stage: assemble build context ---
 FROM scratch AS ctx
-COPY build_files /
 
-# Base Image
-FROM ${BASE_IMAGE}:${TAG_VERSION}
-COPY system_files /
+COPY build        /build
+COPY custom       /custom
+COPY system_files /system_files
+# OCI containers — Renovate pins the digest after :latest
+COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared  /oci/common/shared
+COPY --from=ghcr.io/projectbluefin/common:latest /system_files/bluefin /oci/common/shared
+COPY --from=ghcr.io/ublue-os/brew:latest         /system_files         /oci/brew
 
-ARG BASE_IMAGE="ghcr.io/ublue-os/aurora-dx"
-ARG TAG_VERSION="stable-daily"
+# --- Stage: final image ---
+FROM ghcr.io/ublue-os/silverblue-main:43
+
+ARG IMAGE_NAME="barbatos"
+ARG IMAGE_VENDOR="gagbo"
+ARG SHA_HEAD_SHORT=""
 ARG SET_X=""
 
-### [IM]MUTABLE /opt
-## Some bootable images, like Fedora, have /opt symlinked to /var/opt, in order to
-## make it mutable/writable for users. However, some packages write files to this directory,
-## thus its contents might be wiped out when bootc deploys an image, making it troublesome for
-## some packages. Eg, google-chrome, docker-desktop.
-##
-## Uncomment the following line if one desires to make /opt immutable and be able to be used
-## by the package manager.
+# Brand the OS
+RUN sed -i '/^PRETTY_NAME/s/.*/PRETTY_NAME="Barbatos"/' /usr/lib/os-release
 
-# RUN rm /opt && mkdir /opt
-
-### MODIFICATIONS
-## make modifications desired in your image and install packages by modifying the build.sh script
-## the following RUN directive does all the things required to run "build.sh" as recommended.
-
-RUN sed -i '/^PRETTY_NAME/s/Bazzite/Barbatos/' /usr/lib/os-release
-RUN sed -i '/^PRETTY_NAME/s/Aurora/Barbatos/' /usr/lib/os-release
-
+# Build
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build.sh
+    /ctx/build/build.sh
+
+# /opt writeable (needed for k0s, google-chrome, docker-desktop, etc.)
+RUN rm -rf /opt && ln -s /var/opt /opt
+
+RUN bootc container lint

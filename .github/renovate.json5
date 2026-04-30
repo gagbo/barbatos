@@ -12,9 +12,18 @@
       "matchUpdateTypes": ["pin", "pinDigest"]
     },
     {
-      "enabled": false,
-      "matchUpdateTypes": ["digest", "pinDigest", "pin"],
-      "matchDepTypes": ["container"],
+      "description": "Auto-merge digest updates for base image and OCI containers",
+      "automerge": true,
+      "matchManagers": ["dockerfile"],
+      "matchUpdateTypes": ["digest"],
+      "matchFileNames": ["Containerfile"],
+      "labels": ["renovate", "automerge"],
+    },
+    {
+      "description": "Enable GitHub Actions updates (pinned with SHA)",
+      "enabled": true,
+      "matchUpdateTypes": ["digest", "pinDigest", "pin", "major", "minor", "patch"],
+      "matchDepTypes": ["action"],
       "matchFileNames": [".github/workflows/**.yaml", ".github/workflows/**.yml"],
     },
   ]
