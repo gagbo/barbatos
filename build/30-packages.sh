@@ -58,6 +58,9 @@ fi
 
 log "Installing Barbatos layered packages"
 LAYERED_PACKAGES=(
+	# Command runner (needed by ujust and build-time recipe validation)
+	just
+
 	# Configuration / dotfiles management
 	chezmoi
 
