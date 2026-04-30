@@ -101,16 +101,19 @@ jobs:
           done
 
       # Rechunk for smaller bootc delta updates (~5-10x improvement).
-      # Uses a separate fedora-bootc image that ships bootc-base-imagectl.
+      # buildah-build runs rootless, so we copy the image into rootful storage
+      # where the rechunk container (fedora-bootc) can access it via the
+      # /var/lib/containers bind-mount.
       - name: Rechunk Image
         run: |
-          podman run --rm --privileged \
+          sudo podman image scp $(id -un)@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} root@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          sudo podman run --rm --privileged \
             -v /var/lib/containers:/var/lib/containers \
-            --entrypoint /usr/libexec/bootc-base-imagectl \
             quay.io/fedora/fedora-bootc:43 \
-            rechunk --max-layers 67 \
+            /usr/libexec/bootc-base-imagectl rechunk --max-layers 67 \
             "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
             "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+          sudo podman image scp root@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} $(id -un)@localhost::${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
