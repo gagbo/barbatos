@@ -76,7 +76,7 @@ LAYERED_PACKAGES=(
 	grim slurp wl-clipboard
 	wlsunset swaylock swayidle
 	light cliphist
-  mate-polkit gnome-keyring
+  mate-polkit gnome-keyring gnome-keyring-pam
 	cava qt6-qtmultimedia
 
 	# Terminals & editors

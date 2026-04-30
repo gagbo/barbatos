@@ -15,3 +15,9 @@ log() {
 
 log "Enabling podman.socket"
 systemctl enable podman.socket
+
+log "Enabling gnome-keyring socket activation (all users)"
+systemctl --global enable gnome-keyring-daemon.socket
+
+log "Enabling {niri,sway}-gated polkit agent (all users)"
+systemctl --global enable polkit-agent.service
