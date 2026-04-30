@@ -42,15 +42,19 @@ retry_dnf() {
 	done
 }
 
-log "Installing cosign from upstream release"
-LATEST_COSIGN_VERSION=$(
-	curl -fsSL https://api.github.com/repos/sigstore/cosign/releases/latest |
-		grep tag_name | cut -d : -f2 | tr -d 'v", '
-)
-curl -fsSL -o /tmp/cosign.rpm \
-	"https://github.com/sigstore/cosign/releases/latest/download/cosign-${LATEST_COSIGN_VERSION}-1.x86_64.rpm"
-rpm -ivh /tmp/cosign.rpm
-rm -f /tmp/cosign.rpm
+if rpm -q cosign &>/dev/null; then
+	log "cosign already installed ($(rpm -q cosign)), skipping"
+else
+	log "Installing cosign from upstream release"
+	LATEST_COSIGN_VERSION=$(
+		curl -fsSL https://api.github.com/repos/sigstore/cosign/releases/latest |
+			grep tag_name | cut -d : -f2 | tr -d 'v", '
+	)
+	curl -fsSL -o /tmp/cosign.rpm \
+		"https://github.com/sigstore/cosign/releases/latest/download/cosign-${LATEST_COSIGN_VERSION}-1.x86_64.rpm"
+	rpm -ivh /tmp/cosign.rpm
+	rm -f /tmp/cosign.rpm
+fi
 
 log "Installing Barbatos layered packages"
 LAYERED_PACKAGES=(

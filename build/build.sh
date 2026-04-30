@@ -18,7 +18,7 @@
 # Inspired by VeneOS, AmyOS, m2os and modeled after upstream Bluefin's
 # build_files/shared/build.sh.
 
-set -ouex pipefail
+set -oue pipefail
 
 # Group output for GitHub Actions logs while preserving xtrace state.
 echo_group() {
@@ -47,9 +47,7 @@ log() {
 	if ((had_xtrace)); then set -x; fi
 }
 
-set +x
 log "Starting Barbatos build (multi-stage / finpilot pattern)"
-set -x
 
 echo_group /ctx/build/10-copy-oci.sh
 echo_group /ctx/build/20-repos.sh
