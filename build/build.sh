@@ -54,5 +54,6 @@ echo_group /ctx/build/20-repos.sh
 echo_group /ctx/build/30-packages.sh
 echo_group /ctx/build/40-displaylink.sh
 echo_group /ctx/build/50-just-files.sh
+echo_group /ctx/build/55-image-info.sh
 echo_group /ctx/build/60-services.sh
 echo_group /ctx/build/90-cleanup.sh

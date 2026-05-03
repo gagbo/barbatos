@@ -1,12 +1,11 @@
 #!/usr/bin/bash
 # Phase 50 - Verify that Barbatos ujust recipes landed correctly
 #
-# In the Aurora-based world we appended an `import` line to the legacy
-# 60-custom.just shim. With the new projectbluefin/common layout there is
-# no entry/custom shim - ujust auto-discovers every `.just` file in
-# /usr/share/ublue-os/just. Phase 10 already copied our recipe file there;
-# this phase only sanity-checks the install and runs `just --fmt --check`
-# so a malformed recipe fails the build instead of a running system.
+# The upstream 00-entry.just uses `import?` for 60-custom.just, which in
+# turn imports our barbatos-*.just recipe files. Phase 10 copies all of
+# them into /usr/share/ublue-os/just; this phase sanity-checks the install
+# and runs `just --fmt --check` so a malformed recipe fails the build
+# instead of a running system.
 
 set ${SET_X:+-x} -eou pipefail
 
@@ -30,7 +29,12 @@ if ! ls "${UJUST_DIR}"/barbatos*.just >/dev/null 2>&1; then
 	exit 1
 fi
 
+if [[ ! -f "${UJUST_DIR}/60-custom.just" ]]; then
+	log "ERROR: 60-custom.just shim not found under ${UJUST_DIR}" >&2
+	exit 1
+fi
+
 log "Validating Barbatos recipes with 'just --fmt --check'"
-for recipe in "${UJUST_DIR}"/barbatos*.just; do
+for recipe in "${UJUST_DIR}"/barbatos*.just "${UJUST_DIR}"/60-custom.just; do
 	just --unstable --fmt --check -f "${recipe}"
 done

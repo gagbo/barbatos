@@ -57,9 +57,9 @@ for list in /ctx/custom/flatpaks/*; do
 	install -m 0644 "${list}" "/usr/share/barbatos/flatpaks/$(basename "${list}")"
 done
 
-# ujust auto-discovers .just files in /usr/share/ublue-os/just; dropping our
-# recipe file straight in there is the new finpilot-style integration (no
-# 60-custom.just shim needed).
+# 00-entry.just uses `import? "/usr/share/ublue-os/just/60-custom.just"`, so we
+# ship a 60-custom.just shim that imports our barbatos-*.just recipe files.
+# There is no auto-discovery — the entry point has an explicit import list.
 install -d -m 0755 /usr/share/ublue-os/just
 for recipe in /ctx/custom/ujust/*.just; do
 	install -m 0644 "${recipe}" "/usr/share/ublue-os/just/$(basename "${recipe}")"
