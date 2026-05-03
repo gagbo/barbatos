@@ -75,7 +75,7 @@ LAYERED_PACKAGES=(
 	xwayland-satellite vicinae
 	mako fuzzel swaybg foot
 	grim slurp wl-clipboard
-	wlsunset swaylock swayidle
+	wlsunset swaylock-effects swayidle
 	light cliphist
 	mate-polkit gnome-keyring gnome-keyring-pam
 	cava qt6-qtmultimedia
