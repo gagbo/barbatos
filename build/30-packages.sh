@@ -84,6 +84,14 @@ LAYERED_PACKAGES=(
 	sway sway-systemd
 	xdg-desktop-portal-wlr
 	waybar walker
+	elephant
+	elephant-1password elephant-bitwarden elephant-bluetooth
+	elephant-bookmarks elephant-calc elephant-clipboard
+	elephant-desktopapplications elephant-files elephant-menus
+	elephant-niriactions elephant-nirisessions
+	elephant-playerctl elephant-providerlist elephant-runner elephant-snippets
+	elephant-symbols elephant-todo elephant-unicode elephant-websearch
+	elephant-windows elephant-wireplumber
 	playerctl
 
 	# Terminals & editors
