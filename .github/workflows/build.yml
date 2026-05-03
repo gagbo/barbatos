@@ -100,25 +100,6 @@ jobs:
             podman tag ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} ${{ env.IMAGE_NAME }}:$tag
           done
 
-      # Rechunk for smaller bootc delta updates (~5-10x improvement).
-      # buildah-build runs rootless, so we shuttle the image through rootful
-      # storage via podman save/load for the rechunk container to access it.
-      - name: Rechunk Image
-        run: |
-          podman save -o /tmp/barbatos-pre-rechunk.tar "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          sudo podman load -i /tmp/barbatos-pre-rechunk.tar
-          rm /tmp/barbatos-pre-rechunk.tar
-          sudo podman run --rm --privileged \
-            -v /var/lib/containers:/var/lib/containers \
-            quay.io/fedora/fedora-bootc:43 \
-            /usr/libexec/bootc-base-imagectl rechunk --max-layers 67 \
-            "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" \
-            "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          sudo podman save -o /tmp/barbatos-rechunked.tar "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          podman rmi "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}" || true
-          podman load -i /tmp/barbatos-rechunked.tar
-          sudo rm /tmp/barbatos-rechunked.tar
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
