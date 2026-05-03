@@ -6,3 +6,4 @@
 
 import "/usr/share/ublue-os/just/barbatos-apps.just"
 import "/usr/share/ublue-os/just/barbatos-system.just"
+import "/usr/share/ublue-os/just/barbatos-update.just"
