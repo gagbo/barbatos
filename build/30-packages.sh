@@ -113,6 +113,9 @@ LAYERED_PACKAGES=(
 retry_dnf 5 dnf5 install --refresh --setopt=install_weak_deps=False -y \
 	"${LAYERED_PACKAGES[@]}"
 
+# Remove Host firefox, we install and use a flatpak
+dnf5 remove firefox -y
+
 log "Disabling Copr repos that we only needed at build time"
 if [[ -f /tmp/barbatos/copr-repos ]]; then
 	while read -r repo; do
