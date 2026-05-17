@@ -5,8 +5,6 @@
 ## Override upstream update recipe to use pkexec instead of bare sudo,
 ## so the polkit graphical prompt works from any terminal context.
 
-alias upgrade := update
-
 # Update system, flatpaks and homebrew packages all at once
 [group('System')]
 update:
