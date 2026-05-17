@@ -18,11 +18,11 @@ COPY --from=ghcr.io/projectbluefin/common:latest /system_files/bluefin /oci/comm
 COPY --from=ghcr.io/ublue-os/brew:latest         /system_files         /oci/brew
 
 # --- Stage: final image ---
-FROM ghcr.io/ublue-os/silverblue-main:43
+FROM ghcr.io/ublue-os/silverblue-main:44
 
 ARG IMAGE_NAME="barbatos"
 ARG IMAGE_VENDOR="gagbo"
-ARG FEDORA_MAJOR_VERSION="43"
+ARG FEDORA_MAJOR_VERSION="44"
 ARG SHA_HEAD_SHORT=""
 ARG SET_X=""
 
