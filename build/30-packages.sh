@@ -80,6 +80,14 @@ LAYERED_PACKAGES=(
 	mate-polkit gnome-keyring gnome-keyring-pam
 	cava qt6-qtmultimedia
 
+	# Noctalia tools
+	tesseract tesseract-langpack-fra tesseract-langpack-eng
+	zbar ImageMagick python3 python3-gobject translate-shell
+	wf-recorder
+ 
+	# Deps to `cargo install wl-screenrec`
+	libdrm-devel freeglut-devel clang
+ 	
 	# Sway / Wayland session
 	sway sway-systemd
 	xdg-desktop-portal-wlr
@@ -92,6 +100,7 @@ LAYERED_PACKAGES=(
 	elephant-playerctl elephant-providerlist elephant-runner elephant-snippets
 	elephant-symbols elephant-todo elephant-unicode elephant-websearch
 	elephant-windows elephant-wireplumber
+	libqalculate
 	playerctl
 
 	# Terminals & editors

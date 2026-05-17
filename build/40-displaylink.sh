@@ -19,8 +19,8 @@ log() {
 
 # Pin versions explicitly so renovate (or a human) can bump them.
 # https://github.com/displaylink-rpm/displaylink-rpm/releases
-DISPLAYLINK_RPM_VERSION="v6.1.1-5"
-DISPLAYLINK_EVDI_VERSION="1.14.14"
+DISPLAYLINK_RPM_VERSION="v6.2.0-1"
+DISPLAYLINK_EVDI_VERSION="1.14.16"
 
 RELEASE="$(rpm -E %fedora)"
 log "Installing DisplayLink ${DISPLAYLINK_RPM_VERSION} (evdi ${DISPLAYLINK_EVDI_VERSION}) for Fedora ${RELEASE}"

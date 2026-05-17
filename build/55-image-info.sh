@@ -21,7 +21,7 @@ log "Generating image-info.json"
 
 IMAGE_NAME="${IMAGE_NAME:-barbatos}"
 IMAGE_VENDOR="${IMAGE_VENDOR:-gagbo}"
-FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-43}"
+FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-44}"
 SHA_HEAD_SHORT="${SHA_HEAD_SHORT:-}"
 
 # image-ref follows the OCI reference convention used by bootc

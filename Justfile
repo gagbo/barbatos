@@ -1,6 +1,6 @@
 export repo_organization := env("GITHUB_REPOSITORY_OWNER", "Gerry Agbobada")
 export image_name := env("IMAGE_NAME", "barbatos")
-export fedora_version := env("FEDORA_VERSION", "43")
+export fedora_version := env("FEDORA_VERSION", "44")
 export default_tag := env("DEFAULT_TAG", "stable")
 export bib_image := env("BIB_IMAGE", "quay.io/centos-bootc/bootc-image-builder:latest")
 
