@@ -86,7 +86,7 @@ LAYERED_PACKAGES=(
 	wf-recorder
  
 	# Deps to `cargo install wl-screenrec`
-	libdrm-devel freeglut-devel clang ffmpeg-free-devel
+	libdrm-devel freeglut-devel clang
  	
 	# Sway / Wayland session
 	sway sway-systemd
