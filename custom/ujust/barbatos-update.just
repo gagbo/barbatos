@@ -36,8 +36,6 @@ update:
         /var/home/linuxbrew/.linuxbrew/bin/brew upgrade
     fi
 
-alias auto-update := toggle-updates
-
 # Turn automatic updates on or off
 [group('System')]
 toggle-updates ACTION="prompt":
