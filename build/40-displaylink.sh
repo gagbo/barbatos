@@ -23,9 +23,13 @@ DISPLAYLINK_RPM_VERSION="v6.2.0-1"
 DISPLAYLINK_EVDI_VERSION="1.14.16"
 
 RELEASE="$(rpm -E %fedora)"
+KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 log "Installing DisplayLink ${DISPLAYLINK_RPM_VERSION} (evdi ${DISPLAYLINK_EVDI_VERSION}) for Fedora ${RELEASE}"
+log "Pinning kernel-devel to installed kernel ${KERNEL_VERSION}"
 
-dnf5 install -y dkms kernel-devel make
+# Pin kernel-devel to the exact kernel already in the image (upgraded in
+# phase 15) so dnf does not pull a newer kernel as a dependency.
+dnf5 install -y dkms "kernel-devel-${KERNEL_VERSION}" make
 
 RPM_URL="https://github.com/displaylink-rpm/displaylink-rpm/releases/download/${DISPLAYLINK_RPM_VERSION}/fedora-${RELEASE}-displaylink-${DISPLAYLINK_EVDI_VERSION}-1.github_evdi.x86_64.rpm"
 
@@ -34,11 +38,22 @@ curl -fsSL -o /tmp/displaylink.rpm "${RPM_URL}"
 rpm -ivh --nopost /tmp/displaylink.rpm
 rm -f /tmp/displaylink.rpm
 
-log "Building evdi DKMS module"
-KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+log "Building evdi DKMS module for kernel ${KERNEL_VERSION}"
 dkms add "evdi/${DISPLAYLINK_EVDI_VERSION}" --rpm_safe_upgrade 2>&1 || true
 dkms build "evdi/${DISPLAYLINK_EVDI_VERSION}" -k "${KERNEL_VERSION}"
 dkms install "evdi/${DISPLAYLINK_EVDI_VERSION}" -k "${KERNEL_VERSION}"
+
+log "Regenerating initramfs (includes evdi module)"
+export TMPDIR=/var/tmp
+INITRAMFS="/usr/lib/modules/${KERNEL_VERSION}/initramfs.img"
+dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible \
+	--add ostree -f "${INITRAMFS}"
+
+if [[ ! -s "${INITRAMFS}" ]]; then
+	log "FATAL: ${INITRAMFS} missing after dracut" >&2
+	exit 1
+fi
+ls -lh "${INITRAMFS}"
 
 log "Enabling displaylink-driver service"
 systemctl enable displaylink-driver.service

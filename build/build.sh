@@ -8,6 +8,7 @@
 #
 # Phases:
 #   10  Copy OCI container content (common, brew) and our system_files
+#   15  Kernel upgrade (latest stable + initramfs generation)
 #   20  Repos (Copr + Terra)
 #   30  Layered packages
 #   40  Hardware drivers (DisplayLink)
@@ -50,6 +51,7 @@ log() {
 log "Starting Barbatos build (multi-stage / finpilot pattern)"
 
 echo_group /ctx/build/10-copy-oci.sh
+echo_group /ctx/build/15-kernel-upgrade.sh
 echo_group /ctx/build/20-repos.sh
 echo_group /ctx/build/30-packages.sh
 echo_group /ctx/build/40-displaylink.sh
