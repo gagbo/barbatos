@@ -38,14 +38,13 @@ log "Kernel after upgrade: ${NEW_KVER}"
 
 INITRAMFS="/usr/lib/modules/${NEW_KVER}/initramfs.img"
 if [[ ! -s "${INITRAMFS}" ]]; then
-	log "initramfs missing or empty, regenerating with dracut"
-	dracut --no-hostonly --kver "${NEW_KVER}" --reproducible \
-		--add ostree -f "${INITRAMFS}"
+	log "initramfs missing or empty, regenerating via kernel-install"
+	kernel-install add "${NEW_KVER}" "/usr/lib/modules/${NEW_KVER}/vmlinuz"
 fi
 
 log "Verifying initramfs exists"
 if [[ ! -s "${INITRAMFS}" ]]; then
-	log "FATAL: ${INITRAMFS} still missing after dracut" >&2
+	log "FATAL: ${INITRAMFS} still missing after kernel-install" >&2
 	exit 1
 fi
 ls -lh "${INITRAMFS}"

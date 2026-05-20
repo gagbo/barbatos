@@ -43,14 +43,19 @@ dkms add "evdi/${DISPLAYLINK_EVDI_VERSION}" --rpm_safe_upgrade 2>&1 || true
 dkms build "evdi/${DISPLAYLINK_EVDI_VERSION}" -k "${KERNEL_VERSION}"
 dkms install "evdi/${DISPLAYLINK_EVDI_VERSION}" -k "${KERNEL_VERSION}"
 
-log "Regenerating initramfs (includes evdi module)"
+log "Regenerating initramfs via rpm-ostree kernel-install (includes evdi module)"
 export TMPDIR=/var/tmp
 INITRAMFS="/usr/lib/modules/${KERNEL_VERSION}/initramfs.img"
-dracut --no-hostonly --kver "${KERNEL_VERSION}" --reproducible \
-	--add ostree -f "${INITRAMFS}"
+# Remove the existing initramfs so kernel-install regenerates it with the
+# evdi module included. We go through rpm-ostree kernel-install (triggered
+# by kernel-install add) rather than calling dracut directly, because
+# rpm-ostree adds ostree-specific setup that bare dracut misses
+# (ostree-prepare-root, random device cpio, etc.).
+rm -f "${INITRAMFS}"
+kernel-install add "${KERNEL_VERSION}" "/usr/lib/modules/${KERNEL_VERSION}/vmlinuz"
 
 if [[ ! -s "${INITRAMFS}" ]]; then
-	log "FATAL: ${INITRAMFS} missing after dracut" >&2
+	log "FATAL: ${INITRAMFS} missing after kernel-install" >&2
 	exit 1
 fi
 ls -lh "${INITRAMFS}"
