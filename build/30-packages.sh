@@ -127,6 +127,10 @@ LAYERED_PACKAGES=(
 	# Locale support (en_GB + fr_FR)
 	langpacks-en_GB
 	langpacks-fr
+
+	# Metrics / Monitoring
+	pcp pcp-system-tools
+	cockpit-ws cockpit-system cockpit-ostree cockpit-podman
 )
 retry_dnf 5 dnf5 install --refresh --setopt=install_weak_deps=False -y \
 	"${LAYERED_PACKAGES[@]}"

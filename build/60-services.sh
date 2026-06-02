@@ -21,3 +21,6 @@ systemctl --global enable gnome-keyring-daemon.socket
 
 log "Enabling {niri,sway}-gated polkit agent (all users)"
 systemctl --global enable polkit-agent.service
+
+log "Enabling Cockpit"
+systemctl enable cockpit.socket pmcd pmlogger
