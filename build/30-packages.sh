@@ -131,6 +131,7 @@ LAYERED_PACKAGES=(
 	# Metrics / Monitoring
 	pcp pcp-system-tools
 	cockpit-ws cockpit-system cockpit-ostree cockpit-podman
+	cockpit-selinux
 )
 retry_dnf 5 dnf5 install --refresh --setopt=install_weak_deps=False -y \
 	"${LAYERED_PACKAGES[@]}"
