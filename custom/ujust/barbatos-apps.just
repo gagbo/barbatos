@@ -50,13 +50,11 @@ install-gaming-apps: (_install-flatpak-list "gaming")
 [group('Apps')]
 install-work-apps: (_install-flatpak-list "work")
 
-# Install Noctalia shell for Quickshell
+# Noctalia v5 is layered in the image.
 [group('Apps')]
 install-noctalia-shell:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p ~/.config/quickshell/noctalia-shell
-    curl -sL https://github.com/noctalia-dev/noctalia-shell/releases/latest/download/noctalia-latest.tar.gz \
-      | tar -xz --strip-components=1 -C ~/.config/quickshell/noctalia-shell
-    echo "Run Noctalia through quickshell: \`spawn-at-startup \"qs\" \"-c\" \"noctalia-shell\"\`"
-    echo "Check documentation: https://docs.noctalia.dev/getting-started/compositor-settings/"
+    echo "Noctalia v5 is installed in Barbatos as the noctalia-git package."
+    echo "Run it in niri with: spawn-at-startup \"noctalia\""
+    echo "Docs: https://docs.noctalia.dev/v5/compositor-settings/niri/"

@@ -52,6 +52,7 @@ COPR_REPOS=(
 	ulysg/xwayland-satellite
 	ublue-os/akmods
 	quadratech188/vicinae
+	lionheartp/Hyprland
 )
 for repo in "${COPR_REPOS[@]}"; do
 	dnf5 -y copr enable "${repo}"

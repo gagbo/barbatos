@@ -71,7 +71,7 @@ LAYERED_PACKAGES=(
 	zsh
 
 	# Niri / Wayland session
-	niri noctalia-shell
+	niri noctalia-git
 	xwayland-satellite vicinae
 	mako fuzzel swaybg foot
 	grim slurp wl-clipboard
