@@ -53,6 +53,7 @@ COPR_REPOS=(
 	ublue-os/akmods
 	quadratech188/vicinae
 	lionheartp/Hyprland
+	edward2007/Kanata
 )
 for repo in "${COPR_REPOS[@]}"; do
 	dnf5 -y copr enable "${repo}"
