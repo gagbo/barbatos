@@ -1,0 +1,15 @@
+[Unit]
+Description=Kanata keyboard remapper
+Documentation=https://github.com/jtroo/kanata
+ConditionPathExists=/etc/kanata/config.kbd
+After=systemd-udev-settle.service
+
+[Service]
+Type=simple
+ExecStartPre=/usr/sbin/modprobe uinput
+ExecStart=/usr/bin/kanata --cfg /etc/kanata/config.kbd
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

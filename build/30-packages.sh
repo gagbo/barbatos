@@ -111,8 +111,9 @@ LAYERED_PACKAGES=(
 	ImageMagick fira-code-fonts
 	python3
 
-	# Hardware (Thinkpad fan control)
+	# Hardware (Thinkpad fan control, keyboard remapping)
 	thinkfan
+	kanata
 
 	# Security / sync / storage
 	yubikey-manager
