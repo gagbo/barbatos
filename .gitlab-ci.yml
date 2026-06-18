@@ -1,102 +1,65 @@
 ---
-# GitLab CI/CD Configuration for BarbatOS Image Build
-# This configuration replaces the GitHub Actions workflow and uses vendored shell scripts
-# All commands are internalized in .ci/scripts/ directory
+# GitLab CI/CD Configuration for BarbatOS Image Build via BlueBuild
 
 variables:
-  # Image configuration
-  IMAGE_NAME: "$CI_PROJECT_NAME"
-  IMAGE_DESC: "Gerry Agbobada's customized Universal Blue Image"
-  IMAGE_REGISTRY: "$CI_REGISTRY/gagbo"
-  ARTIFACTHUB_LOGO_URL: "https://avatars.githubusercontent.com/u/10496163?s=200&v=4"
-
-  # Buildah configuration
+  BLUEBUILD_CLI_IMAGE: "ghcr.io/blue-build/cli:v0.9-installer"
+  COSIGN_IMAGE: "ghcr.io/sigstore/cosign/cosign:v3.0.5"
   STORAGE_DRIVER: "vfs"
   BUILDAH_FORMAT: "docker"
   BUILDAH_ISOLATION: "chroot"
 
-  # Cosign version
-  COSIGN_VERSION: "v2.4.1"
-
-# Define pipeline stages
 stages:
   - build
-  - push
-  - sign
 
-# Define when to run the pipeline
 workflow:
   rules:
-    # Run on merge requests
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # Run on main branch pushes
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    # Run on scheduled pipelines (daily builds)
     - if: $CI_PIPELINE_SOURCE == "schedule"
-    # Run on manual/web triggers
     - if: $CI_PIPELINE_SOURCE == "web"
 
-# Main job: build and optionally push/sign the image
-build_push_sign:
+bluebuild:
   stage: build
-
-  # Use container image with buildah pre-installed
   image: quay.io/containers/aio:latest
-
-  # Configure buildah for rootless operation
+  interruptible: true
+  resource_group: $CI_COMMIT_REF_NAME
   variables:
-    STORAGE_DRIVER: vfs
-    BUILDAH_FORMAT: docker
-    BUILDAH_ISOLATION: chroot
-
+    BB_REGISTRY: "$CI_REGISTRY"
+    BB_REGISTRY_NAMESPACE: "$CI_PROJECT_NAMESPACE"
+    BB_USERNAME: "$CI_REGISTRY_USER"
+    BB_PASSWORD: "$CI_REGISTRY_PASSWORD"
+    BB_RETRY_PUSH_COUNT: "3"
   before_script:
-    # Install cosign for signing (only on default branch)
+    - podman run --pull=always --rm "$BLUEBUILD_CLI_IMAGE" | bash
     - |
-      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
-        ./.ci/scripts/install-cosign.sh
+      cosign_container="$(podman create --pull=always "$COSIGN_IMAGE")"
+      podman cp "$cosign_container:/ko-app/cosign" /usr/local/bin/cosign
+      podman rm "$cosign_container"
+      chmod +x /usr/local/bin/cosign
+    - bluebuild --version
+    - cosign version
+    - |
+      if [ -n "${COSIGN_PRIVATE_KEY:-}" ]; then
+        decoded_key="$(printf '%s' "$COSIGN_PRIVATE_KEY" | base64 -d 2>/dev/null || printf '%s' "$COSIGN_PRIVATE_KEY")"
+        export COSIGN_PRIVATE_KEY="$decoded_key"
       fi
-
   script:
-    # Generate metadata (tags and labels)
-    - ./.ci/scripts/generate-metadata.sh
-    - source build.env
-
-    # Build the container image
-    - ./.ci/scripts/build-image.sh
-
-    # Push images (only on default branch, not on MRs)
     - |
-      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
-        ./.ci/scripts/push-image.sh
-      else
-        echo "Skipping push: not on default branch or in merge request"
+      set -euo pipefail
+
+      export BB_BUILD_PUSH=false
+      if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
+        export BB_BUILD_PUSH=true
       fi
 
-    # Sign images with cosign (only on default branch, not on MRs)
-    - |
-      if [ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ] && [ "$CI_PIPELINE_SOURCE" != "merge_request_event" ]; then
-        ./.ci/scripts/sign-image.sh
-      else
-        echo "Skipping signing: not on default branch or in merge request"
+      extra_args=()
+      if [ "${BB_RETRY_PUSH_COUNT}" != "0" ]; then
+        extra_args+=(--retry-push --retry-count "${BB_RETRY_PUSH_COUNT}")
       fi
 
-  # Save build metadata as artifacts
-  artifacts:
-    reports:
-      dotenv: report.env
-    paths:
-      - report.env
-    expire_in: 1 day
-
-  # Define when this job runs
+      bluebuild build -v "${extra_args[@]}" recipes/recipe.yml
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "web"
-
-# Concurrency settings to prevent multiple pipelines running simultaneously
-# This is equivalent to GitHub Actions' concurrency settings
-.auto_devops: &auto_devops
-  interruptible: true
-  resource_group: $CI_COMMIT_REF_NAME

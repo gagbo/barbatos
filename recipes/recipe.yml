@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+name: barbatos
+description: Gerry Agbobada's customized Universal Blue Image
+base-image: ghcr.io/ublue-os/silverblue-main
+image-version: 44
+alt-tags:
+  - stable
+
+modules:
+  - type: containerfile
+    snippets:
+      - |
+        COPY build /ctx/build
+        COPY custom /ctx/custom
+        COPY system_files /ctx/system_files
+        COPY --from=ghcr.io/projectbluefin/common:latest /system_files/shared /ctx/oci/common/shared
+        COPY --from=ghcr.io/projectbluefin/common:latest /system_files/bluefin /ctx/oci/common/shared
+        COPY --from=ghcr.io/ublue-os/brew:latest /system_files /ctx/oci/brew
+
+        ARG FEDORA_MAJOR_VERSION="44"
+        ARG SET_X=""
+
+        RUN sed -i '/^PRETTY_NAME/s/.*/PRETTY_NAME="Barbatos"/' /usr/lib/os-release
+
+        RUN --mount=type=cache,dst=/var/cache \
+            --mount=type=cache,dst=/var/log \
+            --mount=type=tmpfs,dst=/tmp \
+            IMAGE_NAME="barbatos" \
+            IMAGE_VENDOR="gagbo" \
+            FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}" \
+            SHA_HEAD_SHORT="" \
+            SET_X="${SET_X}" \
+            /ctx/build/build.sh
+
+        RUN rm -rf /opt && ln -s /var/opt /opt
+
+        RUN bootc container lint
+
+  - type: signing

@@ -70,7 +70,7 @@ sudoif command *args:
     }
     sudoif {{ command }} {{ args }}
 
-# Build the container image (multi-stage finpilot pattern)
+# Build the container image locally
 build $target_image=image_name $tag=default_tag:
     #!/usr/bin/env bash
 

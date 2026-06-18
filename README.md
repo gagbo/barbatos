@@ -1,6 +1,6 @@
 # Barbatos
 
-Gerry Agbobada's customized [Universal Blue](https://universal-blue.org/) image, built on top of [Bluefin](https://projectbluefin.io/) using the multi-stage [finpilot](https://github.com/projectbluefin/finpilot) pattern.
+Gerry Agbobada's customized [Universal Blue](https://universal-blue.org/) image, built on top of [Bluefin](https://projectbluefin.io/) and built in CI with [BlueBuild](https://blue-build.org/).
 
 ## Architecture
 
@@ -53,7 +53,8 @@ barbatos/
 │   └── ujust/              # Barbatos ujust recipes (barbatos.just)
 ├── system_files/           # Hardware-specific config (thinkfan, udev, systemd units)
 ├── iso/                    # ISO build config (iso.toml)
-├── Containerfile           # Multi-stage build (finpilot pattern)
+├── Containerfile           # Local/manual build definition
+├── recipes/                # BlueBuild CI recipe
 ├── Justfile                # Local build/test commands
 └── .github/workflows/      # CI (build + rechunk + sign, ISO, cleanup)
 ```
@@ -102,7 +103,7 @@ See the [cosign setup section](#container-signing-setup) below if you're forking
 ## Credits
 
 - [Universal Blue](https://universal-blue.org/) and [Project Bluefin](https://projectbluefin.io/)
-- [finpilot template](https://github.com/projectbluefin/finpilot)
+- [BlueBuild](https://blue-build.org/)
 - Inspired by [VeneOS](https://github.com/Venefilyn/veneos), [AmyOS](https://github.com/astrovm/amyos), [m2os](https://github.com/m2giles/m2os)
 
 ## License
