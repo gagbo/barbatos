@@ -1,6 +1,6 @@
 # Barbatos - Gerry Agbobada's customized Universal Blue image
 #
-# Multi-stage build following the finpilot / upstream Bluefin pattern.
+# Build flow mirrored by the BlueBuild recipe.
 # Base: silverblue-main (Fedora GNOME)
 # Layers: projectbluefin/common (shared desktop config) + ublue-os/brew (homebrew)
 #

@@ -3,3 +3,4 @@ _build_*
 _build-*/**
 output/
 .tmp/
+/.bluebuild-scripts_*

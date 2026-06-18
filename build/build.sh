@@ -48,7 +48,7 @@ log() {
 	if ((had_xtrace)); then set -x; fi
 }
 
-log "Starting Barbatos build (multi-stage / finpilot pattern)"
+log "Starting Barbatos build"
 
 echo_group /ctx/build/10-copy-oci.sh
 echo_group /ctx/build/15-kernel-upgrade.sh
