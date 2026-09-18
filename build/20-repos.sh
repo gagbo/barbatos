@@ -54,6 +54,7 @@ COPR_REPOS=(
 	quadratech188/vicinae
 	lionheartp/Hyprland
 	edward2007/Kanata
+	erikreider/swayosd
 )
 for repo in "${COPR_REPOS[@]}"; do
 	dnf5 -y copr enable "${repo}"

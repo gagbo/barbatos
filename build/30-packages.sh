@@ -76,6 +76,7 @@ LAYERED_PACKAGES=(
 	mako fuzzel swaybg foot
 	grim slurp wl-clipboard
 	wlsunset swaylock-effects swayidle
+	swayosd
 	light cliphist
 	mate-polkit gnome-keyring gnome-keyring-pam
 	cava qt6-qtmultimedia
@@ -90,6 +91,7 @@ LAYERED_PACKAGES=(
  	
 	# Sway / Wayland session
 	sway sway-systemd
+	xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk
 	xdg-desktop-portal-wlr
 	waybar walker
 	elephant
