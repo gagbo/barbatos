@@ -19,8 +19,10 @@ log() {
 
 # Pin versions explicitly so renovate (or a human) can bump them.
 # https://github.com/displaylink-rpm/displaylink-rpm/releases
-DISPLAYLINK_RPM_VERSION="v6.2.0-1"
-DISPLAYLINK_EVDI_VERSION="1.14.16"
+DISPLAYLINK_RPM_VERSION="v6.3.0-1"
+DISPLAYLINK_EVDI_VERSION="1.15.0"
+DISPLAYLINK_EVDI_RELEASE="1.github_evdi"
+DISPLAYLINK_EVDI_DKMS_VERSION="${DISPLAYLINK_EVDI_VERSION}-${DISPLAYLINK_EVDI_RELEASE}"
 
 RELEASE="$(rpm -E %fedora)"
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
@@ -31,17 +33,17 @@ log "Pinning kernel-devel to installed kernel ${KERNEL_VERSION}"
 # phase 15) so dnf does not pull a newer kernel as a dependency.
 dnf5 install -y dkms "kernel-devel-${KERNEL_VERSION}" make
 
-RPM_URL="https://github.com/displaylink-rpm/displaylink-rpm/releases/download/${DISPLAYLINK_RPM_VERSION}/fedora-${RELEASE}-displaylink-${DISPLAYLINK_EVDI_VERSION}-1.github_evdi.x86_64.rpm"
+RPM_URL="https://github.com/displaylink-rpm/displaylink-rpm/releases/download/${DISPLAYLINK_RPM_VERSION}/fedora-${RELEASE}-displaylink-${DISPLAYLINK_EVDI_VERSION}-${DISPLAYLINK_EVDI_RELEASE}.x86_64.rpm"
 
 log "Downloading ${RPM_URL}"
 curl -fsSL -o /tmp/displaylink.rpm "${RPM_URL}"
 rpm -ivh --nopost /tmp/displaylink.rpm
 rm -f /tmp/displaylink.rpm
 
-log "Building evdi DKMS module for kernel ${KERNEL_VERSION}"
-dkms add "evdi/${DISPLAYLINK_EVDI_VERSION}" --rpm_safe_upgrade 2>&1 || true
-dkms build "evdi/${DISPLAYLINK_EVDI_VERSION}" -k "${KERNEL_VERSION}"
-dkms install "evdi/${DISPLAYLINK_EVDI_VERSION}" -k "${KERNEL_VERSION}"
+log "Building evdi ${DISPLAYLINK_EVDI_DKMS_VERSION} DKMS module for kernel ${KERNEL_VERSION}"
+dkms add "evdi/${DISPLAYLINK_EVDI_DKMS_VERSION}" --rpm_safe_upgrade 2>&1 || true
+dkms build "evdi/${DISPLAYLINK_EVDI_DKMS_VERSION}" -k "${KERNEL_VERSION}"
+dkms install "evdi/${DISPLAYLINK_EVDI_DKMS_VERSION}" -k "${KERNEL_VERSION}"
 
 log "Regenerating initramfs via rpm-ostree kernel-install (includes evdi module)"
 export TMPDIR=/var/tmp
